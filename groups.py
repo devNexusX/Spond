@@ -3,15 +3,17 @@ import json
 import os
 
 from config import password, username
-
-from spond import spond
+from spond_auth_helpers import create_spond_session
 
 if not os.path.exists("./exports"):
     os.makedirs("./exports")
 
 
 async def main():
-    s = spond.Spond(username=username, password=password)
+    s = create_spond_session(username=username, password=password)
+    
+    if s is None:
+        return  # User aborted
     groups = await s.get_groups()
     for group in groups:
         name = group["name"]

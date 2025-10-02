@@ -1,0 +1,9 @@
+# Requirements for Spond Toolkit
+
+# Core dependencies
+aiohttp>=3.8.0
+asyncio
+
+# Optional but recommended for better error handling
+certifi
+charset-normalizer

@@ -1,89 +1,93 @@
-# Spond
-![spond logo](https://github.com/Olen/Spond/blob/main/images/spond-logo.png?raw=true)
+# Spond Toolkit - Enhanced Python Scripts
 
-Simple, unofficial library with some example scripts to access data from the [Spond](https://spond.com/) API.
+An enhanced toolkit for working with the Spond API, featuring improved authentication handling, 2FA support, and web token management.
 
-> [!WARNING]
-> Notice breaking changes from versions =< 0.99 to versions >= 1.0
+## 🔥 Key Features
 
-## Install
+- **🛡️ Safe Authentication**: Prioritizes web tokens to avoid account lockouts
+- **📱 2FA Support**: Interactive SMS verification when needed
+- **🔄 DRY Architecture**: Shared authentication helpers across all scripts
+- **⚡ Web Token Extraction**: Extract long-lived tokens from browser sessions
+- **📊 Multiple Export Formats**: Groups and attendance data
 
-`pip install spond`
+## 🚀 Quick Start
 
-## Usage
-
-You need a username and password from Spond
-
-
-
-### Example code
-
-```
-import asyncio
-from spond import spond
-
-username = 'my@mail.invalid'
-password = 'Pa55worD'
-group_id = 'C9DC791FFE63D7914D6952BE10D97B46'  # fake 
-
-async def main():
-    s = spond.Spond(username=username, password=password)
-    group = await s.get_group(group_id)
-    print(group['name'])
-    await s.clientsession.close()
-
-asyncio.run(main())
-
+### 1. Installation
+```bash
+git clone https://github.com/your-username/spond-toolkit.git
+cd spond-toolkit
+pip install -r requirements.txt
 ```
 
-## Key methods
+### 2. Configuration
+```bash
+# Copy sample config
+cp config.py.sample config.py
 
-### get_groups()
+# Edit with your credentials
+# Note: Username/password only used as fallback - web tokens preferred
+```
 
-Get details of all your group memberships and all members of those groups.
+### 3. Get Web Token (Recommended)
+```bash
+# Extract token from web browser (safest method)
+python web_token_extractor.py
 
-### get_events([group_id, subgroup_id, include_scheduled, max_end, min_end, max_start, min_start, max_events])
+# Follow the prompts to extract token from https://spond.com
+```
 
-Get details of events, limited to 100 by default.
-Optional parameters allow filtering by start and end datetimes, group and subgroup; more events to be returned; inclusion of 'scheduled' events.
+### 4. Use Scripts
+```bash
+# Export all groups
+python groups.py
 
-### get_person()
-Get a member's details.
+# Export attendance data
+python attendance.py --from 2025-01-01 --to 2025-12-31
 
-### get_messages(max_chats=100)
-Get chats, limited to 100 by default.
-Optional parameter allows more events to be returned.
+# Include all member responses
+python attendance.py --from 2025-01-01 -a
+```
 
-### send_message(text, user=None, group_uid=None, chat_id=None)
-Send a message with content `text`.
-Either specify an existing `chat_id`, or both `user` and `group_uid` for a new chat.
+## 📖 Documentation
 
-### get_event_attendance_xlsx()
-Get Excel attendance report for a single event, available via the web client.
+- [Setup Guide](docs/SETUP.md) - Detailed installation and configuration
+- [Authentication Guide](docs/AUTHENTICATION.md) - How to safely authenticate
+- [Examples](docs/EXAMPLES.md) - Common usage patterns
 
-### change_response()
-Change a member's response for an event (e.g. accept/decline)
+## 🔒 Security Features
 
-## Example scripts
+- **Web Token Priority**: Uses browser-extracted tokens to minimize API login attempts
+- **Account Protection**: Warns about operations that could cause lockouts  
+- **JWT Analysis**: Checks token expiry without API calls
+- **Conservative Testing**: Minimal authentication attempts
 
-The following scripts are included as examples.  Some of the scripts might require additional packages to be installed (csv, ical etc).
+## 📁 Output
 
-Rename the file `config.py.sample` to `config.py` and add your username and password to the file before running the samples.
+Scripts create organized exports in the `./exports/` directory:
+- **Groups**: JSON files with complete group data
+- **Attendance**: CSV files with event attendance details
 
-### ical.py
-Generates an ics-file of upcoming events.
+## 🤝 Contributing
 
-### groups.py
-Generates a json-file for each group you are a member of.
+This is a fork/enhancement of the original Spond project with added authentication safety and usability improvements. 
 
-### attendance.py &lt;-f from_date&gt; &lt;-t to_date&gt; [-a]
-Generates a csv-file for each event between `from_date` and `to_date` with attendance status of all organizers.  The optional parameter `-a` also includes all members that has been invited.
+### What's New:
+- Shared authentication module (`spond_auth_helpers.py`)
+- Web token extraction tool
+- Enhanced error handling and user guidance
+- Account lockout protection
+- JWT token analysis
 
-### transactions.py
-Generates a csv-file for transactions / payments appeared in [Spond Club](https://www.spond.com/spond-club-overview/) > Finance > Payments.
+## 📄 License
 
-## AsyncIO
-[Asyncio](https://docs.python.org/3/library/asyncio.html) might seem intimidating in the beginning, but for basic stuff, it is quite easy to follow the examples above, and just remeber to prefix functions that use the API with `async def ...` and to `await` all API-calls and all calls to said functions.
+This project maintains the original license terms. See [LICENSE](LICENSE) for details.
 
-[This article](https://realpython.com/async-io-python/) will give a nice introduction to both why, when and how to use asyncio in projects.
+## 🙏 Credits
 
+Based on the original Spond project by [Olen](https://github.com/Olen/Spond).
+
+Enhanced with:
+- Improved authentication handling
+- 2FA support 
+- Web token management
+- Better security practices
